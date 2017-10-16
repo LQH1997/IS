@@ -47,11 +47,12 @@ class MD5 {
 
 	Block rotate(Block temp, Block s);
 
-	void intoHex(int a);
+	void intoHex();
 };
 
 void MD5::init(string str) {
 	inputText =  str;
+    encryptedText = "";
 	chainedVar[0] = 0x67452301;
 	chainedVar[1] = 0xEFCDAB89;
 	chainedVar[2] = 0x98BADCFE;
@@ -160,10 +161,10 @@ void MD5::encrypt(string str) {
 		num[i] = strByte[i];
 	}
 	process(num);
-	intoHex(chainedVar[0]);
-	intoHex(chainedVar[1]);
-	intoHex(chainedVar[2]);
-	intoHex(chainedVar[3]);
+	intoHex();
+	//intoHex(chainedVar[1]);
+	//intoHex(chainedVar[2]);
+	//intoHex(chainedVar[3]);
 }
 
 void MD5::padding(string str) {
@@ -255,13 +256,16 @@ string MD5::returnEmcryptedText() {
 	return encryptedText;
 }
 
-void MD5::intoHex(int a) {
+void MD5::intoHex() {
 	int b;
+    int a;
     string str1;
     string str="";
     string hexStr = "0123456789ABCDEF";
-    for(int i=0;i<4;i++)
-    {
+    for(int j = 0; j < 4; j++) {
+        str = "";
+        a = chainedVar[j];
+    for(int i=0;i<4;i++) {
         str1="";
         b=((a>>i*8)%(1<<8))&0xff;
         for (int j = 0; j < 2; j++)
@@ -272,11 +276,15 @@ void MD5::intoHex(int a) {
         str+=str1;
     }
     encryptedText += str;
+    }
 }
 
 int main() {
 	MD5 a;
-	string abc = "12345678";
-	a.encrypt(abc);
+    string abc;
+    while(true) {
+    cin >> abc;
+    a.encrypt(abc);
 	cout << a.returnEmcryptedText() << endl;
+    }
 }
